@@ -45,4 +45,4 @@ function download () {
 download
 configure_kubectl
 use_context
-echo "==> mist_warning: If this is your first time provisioning the vms, the kubeserver will need some minuted to be up and running"
+echo "==> mist_warning: If this is your first time provisioning the vms, the kubeserver will need some minutes to be up and running"

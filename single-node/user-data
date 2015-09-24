@@ -489,6 +489,27 @@ After=flanneld.service
 EOF
     }
 
+    local TEMPLATE=/etc/systemd/system/core-base-pull.service
+    [ -f $TEMPLATE ] || {
+        echo "TEMPLATE: $TEMPLATE"
+        mkdir -p $(dirname $TEMPLATE)
+        cat << EOF > $TEMPLATE
+[Unit]
+Description=Pull the mist/core_base image
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStart=/usr/bin/docker pull mist/core_base
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Global=true
+EOF
+    }
+
 }
 
 function start_addons {
@@ -505,6 +526,15 @@ function start_addons {
     curl --silent -XPOST -d"$(cat /srv/kubernetes/manifests/kube-dns-svc.json)" "http://127.0.0.1:8080/api/v1/namespaces/kube-system/services" > /dev/null
 }
 
+# Fix the docker service --log-ouput
+if [ -f /etc/systemd/system/docker.service ]; then
+    :
+else
+    cp /usr/lib64/systemd/system/docker.service /etc/systemd/system/docker.service
+    sed -i s/"--log-driver=journald "//g /etc/systemd/system/docker.service
+    systemctl daemon-reload; systemctl restart docker
+fi
+
 init_config
 init_templates
 systemctl enable etcd2; systemctl start etcd2
@@ -515,5 +545,11 @@ systemctl stop update-engine; systemctl mask update-engine
 
 systemctl daemon-reload
 systemctl enable kubelet; systemctl start kubelet
+systemctl enable fleet.service; systemctl start fleet.service
 start_addons
+
+# Our services here
+fleetctl load /etc/systemd/system/core-base-pull.service
+fleetctl start core-base-pull.service
+
 echo "DONE"
