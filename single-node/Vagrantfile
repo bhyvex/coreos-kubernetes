@@ -12,7 +12,7 @@ Vagrant.require_version ">= 1.6.0"
 NODE_IP = "172.17.4.99"
 USER_DATA_PATH = File.expand_path("user-data")
 SSL_TARBALL_PATH = File.expand_path("ssl/controller.tar")
-NODE_MEMORY = ENV['NODE_MEMORY'] || 1024
+NODE_MEMORY = ENV['NODE_MEMORY'] || 2048
 
 if !File.exist?(SSL_TARBALL_PATH) then
     system("mkdir -p ssl && ./init-ssl ssl IP.1=10.3.0.1,IP.2=#{NODE_IP}") or abort ("failed generating SSL artifacts")
