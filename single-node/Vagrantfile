@@ -12,7 +12,7 @@ Vagrant.require_version ">= 1.6.0"
 NODE_IP = "172.17.4.99"
 USER_DATA_PATH = File.expand_path("user-data")
 SSL_TARBALL_PATH = File.expand_path("ssl/controller.tar")
-NODE_MEMORY = ENV['NODE_MEMORY'] || 2048
+NODE_MEMORY = ENV['NODE_MEMORY'] || 4096
 NODE_CPUS = ENV['NODE_CPUS'] || 2
 
 if !File.exist?(SSL_TARBALL_PATH) then
