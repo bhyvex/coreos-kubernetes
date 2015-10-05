@@ -532,6 +532,7 @@ if [ -f /etc/systemd/system/docker.service ]; then
 else
     cp /usr/lib64/systemd/system/docker.service /etc/systemd/system/docker.service
     sed -i s/"--log-driver=journald "//g /etc/systemd/system/docker.service
+    sed -i '/MountFlags=slave/a Environment="DOCKER_OPTS=-H=0.0.0.0:2376"' /etc/systemd/system/docker.service
     systemctl daemon-reload; systemctl restart docker
 fi
 
@@ -540,7 +541,6 @@ init_templates
 systemctl enable etcd2; systemctl start etcd2
 
 init_flannel
-
 systemctl stop update-engine; systemctl mask update-engine
 
 systemctl daemon-reload
