@@ -146,6 +146,7 @@ spec:
     - --etcd_servers=${ETCD_ENDPOINTS}
     - --allow-privileged=true
     - --service-cluster-ip-range=${SERVICE_IP_RANGE}
+    - --service-node-port-range=25826-32767
     - --secure_port=443
     - --advertise-address=${ADVERTISE_IP}
     - --admission-control=NamespaceLifecycle,NamespaceExists,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota
@@ -532,7 +533,7 @@ if [ -f /etc/systemd/system/docker.service ]; then
 else
     cp /usr/lib64/systemd/system/docker.service /etc/systemd/system/docker.service
     sed -i s/"--log-driver=journald "//g /etc/systemd/system/docker.service
-    sed -i '/MountFlags=slave/a Environment="DOCKER_OPTS=-H=0.0.0.0:2376"' /etc/systemd/system/docker.service
+    sed -i '/MountFlags=slave/a Environment="DOCKER_OPTS=-H=0.0.0.0:2375"' /etc/systemd/system/docker.service
     systemctl daemon-reload; systemctl restart docker
 fi
 
