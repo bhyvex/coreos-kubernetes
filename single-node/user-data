@@ -550,7 +550,7 @@ systemctl enable fleet.service; systemctl start fleet.service
 start_addons
 
 # Our services here
-fleetctl load /etc/systemd/system/core-base-pull.service
-fleetctl start core-base-pull.service
+#fleetctl load /etc/systemd/system/core-base-pull.service
+#fleetctl start core-base-pull.service
 
 echo "DONE"
